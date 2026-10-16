@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="gu" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shree Swaminarayan Gurukul - Ramat Utsav Live Scoreboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            bg: '#121316',
+                            card: '#1a1c23',
+                            border: '#2e323e',
+                            gold: '#E5C158',
+                            goldLight: '#F3E5AB',
+                            muted: '#9ca3af'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        /* Dark Theme Default */
+        html.dark body {
+            background-color: #121316;
+            color: #e5e7eb;
+        }
+        html.dark .card-custom {
+            background-color: #1a1c23;
+            border: 1px solid rgba(229, 193, 88, 0.25);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+        html.dark .bg-header { background-color: rgba(24, 26, 32, 0.95); }
+        html.dark .bg-subcard { background-color: #121316; }
+
+        /* Light Theme Mode - Fixed Contrast */
+        html.light body {
+            background-color: #f3f4f6;
+            color: #111827;
+        }
+        html.light .card-custom {
+            background-color: #ffffff;
+            border: 1px solid #d1d5db;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        html.light .bg-header { background-color: #ffffff; }
+        html.light .gold-gradient-text {
+            background: linear-gradient(135deg, #b45309 0%, #d97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        html.light .text-white { color: #111827 !important; }
+        html.light .text-gray-200, html.light .text-gray-300 { color: #374151 !important; }
+        html.light .text-gray-400 { color: #4b5563 !important; }
+        html.light .bg-subcard { background-color: #f9fafb; }
+        
+        /* High Contrast Light Mode Fixes */
+        html.light .rank-2-text { color: #475569 !important; } /* Dark Slate */
+        html.light .rank-3-text { color: #92400e !important; } /* Dark Amber/Bronze */
+        html.light .rank-1-text { color: #b45309 !important; } /* Deep Gold */
+
+        .heading-font { font-family: 'Cinzel', serif; }
+        
+        html.dark .gold-gradient-text {
+            background: linear-gradient(135deg, #F3E5AB 0%, #E5C158 50%, #C8A032 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gold-soft-bg {
+            background: linear-gradient(135deg, #E5C158 0%, #C8A032 100%);
+        }
+
+        /* Highly readable large text for TV / Far Screen */
+        .far-readable-text {
+            font-size: clamp(1.1rem, 2vw, 1.8rem);
+            font-weight: 800;
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #121316; }
+        ::-webkit-scrollbar-thumb { background: #2e323e; border-radius: 4px; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-brand-gold selection:text-black">
+
+    <!-- HEADER / NAVIGATION -->
+    <header id="main-header" class="bg-header backdrop-blur-md sticky top-0 z-50 border-b border-brand-border px-4 py-3 shadow-md">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3 text-center md:text-left">
+                <div class="w-12 h-12 rounded-full gold-soft-bg flex items-center justify-center text-black font-bold text-xl shadow-md shrink-0">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <div>
+                    <h1 class="heading-font text-lg md:text-2xl font-black gold-gradient-text tracking-wide">SHREE SWAMINARAYAN GURUKUL</h1>
+                    <p class="text-xs text-amber-600 dark:text-brand-gold font-bold tracking-widest">RAMAT UTSAV – LIVE SCOREBOARD</p>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs & Theme Toggle -->
+            <div class="flex flex-wrap items-center justify-center gap-2">
+                <button onclick="switchTab('scoreboard')" id="nav-scoreboard" class="px-4 py-2 rounded-xl font-bold text-sm md:text-base transition-all bg-brand-gold text-black shadow">
+                    <i class="fa-solid fa-ranking-star mr-1"></i> Scoreboard
+                </button>
+                <button onclick="switchTab('games')" id="nav-games" class="px-4 py-2 rounded-xl font-bold text-sm md:text-base transition-all bg-[#22252e] text-gray-200 border border-brand-border hover:border-brand-gold/50">
+                    <i class="fa-solid fa-gamepad mr-1"></i> Games & Schedule
+                </button>
+                <button onclick="switchTab('led')" id="nav-led" class="px-4 py-2 rounded-xl font-bold text-sm md:text-base transition-all bg-[#22252e] text-gray-200 border border-brand-border hover:border-brand-gold/50">
+                    <i class="fa-solid fa-tv mr-1"></i> LED Display
+                </button>
+                <button onclick="switchTab('admin')" id="nav-admin" class="px-4 py-2 rounded-xl font-bold text-sm md:text-base transition-all bg-[#22252e] text-gray-200 border border-brand-border hover:border-brand-gold/50">
+                    <i class="fa-solid fa-lock mr-1"></i> Admin Login
+                </button>
+                
+                <!-- Dark / Light Theme Switcher -->
+                <button onclick="toggleThemeMode()" id="theme-toggle-btn" class="px-3 py-2 rounded-xl bg-amber-500 text-black font-bold text-sm shadow hover:opacity-90 transition flex items-center gap-1" title="Toggle Black/White Mode">
+                    <i id="theme-btn-icon" class="fa-solid fa-sun"></i> <span id="theme-btn-text">Light</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- LIVE TICKER -->
+    <div id="main-ticker" class="bg-subcard border-b border-brand-border/60 py-2 px-4 flex items-center">
+        <div class="bg-amber-500/20 border border-amber-500/40 text-amber-600 dark:text-amber-500 text-xs font-bold px-3 py-0.5 rounded-full uppercase tracking-wider mr-3 flex items-center gap-2 shrink-0">
+            <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span> Cloud Sync Active
+        </div>
+        <div class="overflow-hidden whitespace-nowrap w-full">
+            <div id="ticker-content" class="inline-block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                શ્રી સ્વામિનારાયણ ગુરુકુલ રામત ઉત્સવમાં આપનું હાર્દિક સ્વાગત છે! | તમામ ડિવાઇસ સાથે લાઈવ કનેક્ટેડ.
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6">
+
+        <!-- 1. SCOREBOARD SECTION -->
+        <section id="tab-scoreboard" class="tab-content space-y-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="card-custom p-4 rounded-xl flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-500 flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-users"></i></div>
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-brand-muted">Total Groups</p>
+                        <h3 id="stat-groups" class="text-2xl font-black text-white">0</h3>
+                    </div>
+                </div>
+                <div class="card-custom p-4 rounded-xl flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-500 flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-medal"></i></div>
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-brand-muted">Completed Games</p>
+                        <h3 id="stat-games" class="text-2xl font-black text-white">0</h3>
+                    </div>
+                </div>
+                <div class="card-custom p-4 rounded-xl flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-500 flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-award"></i></div>
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-brand-muted">Winner Students</p>
+                        <h3 id="stat-winners" class="text-2xl font-black text-white">0</h3>
+                    </div>
+                </div>
+                <div class="card-custom p-4 rounded-xl flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-500 flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-clock"></i></div>
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-brand-muted">Active Live Time</p>
+                        <h3 id="stat-active-time" class="text-base font-bold text-amber-600 dark:text-amber-500 mt-1">00:00:00 AM</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leaderboard Table -->
+            <div class="card-custom rounded-2xl p-4 md:p-6 shadow-xl">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                    <div>
+                        <h2 class="heading-font text-2xl md:text-3xl font-black gold-gradient-text">Championship Leaderboard</h2>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">1st (100 Pts), 2nd (75 Pts), 3rd (50 Pts) ના આધારે રૅન્ક ઓટોમેટિક ગણાશે.</p>
+                    </div>
+                    <div class="flex items-center gap-3 w-full md:w-auto">
+                        <input type="text" id="search-group" placeholder="Search Group Name..." onkeyup="renderScoreboard()" class="bg-subcard border border-brand-border rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:border-brand-gold w-full md:w-64">
+                        <button onclick="forceSyncData()" class="px-4 py-2 bg-[#22252e] border border-brand-border text-brand-gold rounded-lg text-sm hover:bg-brand-gold/10 transition flex items-center gap-1" title="Force Sync"><i class="fa-solid fa-rotate"></i> Sync</button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse min-w-[650px]">
+                        <thead>
+                            <tr class="border-b border-brand-border text-amber-600 dark:text-amber-500 text-sm md:text-base uppercase tracking-wider font-extrabold">
+                                <th class="p-3">Rank</th>
+                                <th class="p-3">Group / House Name</th>
+                                <th class="p-3 text-center">Played</th>
+                                <th class="p-3 text-center">1st (100)</th>
+                                <th class="p-3 text-center">2nd (75)</th>
+                                <th class="p-3 text-center">3rd (50)</th>
+                                <th class="p-3 text-right font-black">Total Points</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scoreboard-tbody" class="divide-y divide-brand-border/40 text-base md:text-lg">
+                            <!-- JS Dynamic Content -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. GAMES & SCHEDULE SECTION -->
+        <section id="tab-games" class="tab-content hidden space-y-6">
+            <div class="card-custom rounded-2xl p-4 md:p-6 shadow-xl">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                    <div>
+                        <h2 class="heading-font text-2xl md:text-3xl font-black gold-gradient-text">Games & Schedule</h2>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">લાઈવ અપડેટ થતું શેડ્યૂલ અને રમત ના પરિણામો</p>
+                    </div>
+                    <div class="flex items-center gap-3 w-full md:w-auto">
+                        <select id="filter-game-status" onchange="renderGamesList()" class="bg-subcard border border-brand-border rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:border-brand-gold">
+                            <option value="ALL">All Status</option>
+                            <option value="Live">Live</option>
+                            <option value="Upcoming">Upcoming</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                        <input type="text" id="search-game" placeholder="Search Game..." onkeyup="renderGamesList()" class="bg-subcard border border-brand-border rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:border-brand-gold w-full md:w-64">
+                    </div>
+                </div>
+
+                <div id="games-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- JS Dynamic Content -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. LED DISPLAY MODE -->
+        <section id="tab-led" class="tab-content hidden">
+            <div class="card-custom rounded-3xl p-6 md:p-8 shadow-2xl text-center space-y-6 border-2 border-brand-gold/40">
+                <div id="led-top-controls" class="flex flex-col md:flex-row justify-between items-center gap-4 pb-2 border-b border-brand-border/50">
+                    <div class="text-left">
+                        <h2 class="heading-font text-2xl md:text-3xl font-black gold-gradient-text">MEGA LED LIVE DISPLAY</h2>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Big Screen TV Live Display Mode</p>
+                    </div>
+                    <button onclick="openLedFullScreen()" class="px-8 py-3 gold-soft-bg text-black font-extrabold rounded-xl shadow-xl hover:opacity-90 transition text-base flex items-center gap-2">
+                        <i class="fa-solid fa-expand text-xl"></i> Full Screen TV Mode
+                    </button>
+                </div>
+
+                <div class="min-h-[500px] overflow-hidden relative p-2">
+                    <div class="space-y-6" id="led-scroll-content">
+                        <!-- JS Dynamic Content -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. ADMIN CONTROL DASHBOARD -->
+        <section id="tab-admin" class="tab-content hidden space-y-6">
+            <div id="admin-login-card" class="max-w-md mx-auto card-custom rounded-2xl p-6 md:p-8 shadow-2xl">
+                <div class="text-center mb-6">
+                    <div class="w-14 h-14 rounded-full gold-soft-bg flex items-center justify-center text-black font-bold text-xl mx-auto mb-3 shadow">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h2 class="heading-font text-2xl font-bold gold-gradient-text">Admin Login</h2>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">સંચાલન પેનલ માટે લોગિન કરો</p>
+                </div>
+                <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-amber-600 dark:text-brand-gold mb-1">Username</label>
+                        <input type="text" id="admin-user" required class="w-full bg-subcard border border-brand-border rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-gold" placeholder="admin">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-amber-600 dark:text-brand-gold mb-1">Password</label>
+                        <input type="password" id="admin-pass" required class="w-full bg-subcard border border-brand-border rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-gold" placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="w-full py-3 gold-soft-bg text-black font-bold rounded-lg shadow hover:opacity-90 transition">Login</button>
+                </form>
+                <p class="text-center text-xs text-gray-500 mt-4">Default: Username: <b>admin</b> | Password: <b>gurukul2026</b></p>
+            </div>
+
+            <div id="admin-dashboard-panel" class="hidden space-y-6">
+                <div class="flex flex-col md:flex-row justify-between items-center card-custom p-4 rounded-xl gap-4">
+                    <div>
+                        <h2 class="heading-font text-xl font-bold gold-gradient-text">Admin Control Dashboard</h2>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">ગેમ મેનેજમેન્ટ, લાઈવ સ્કોર, એક્સલ અને સેટિંગ્સ</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button onclick="adminSubTab('games')" class="px-3 py-2 bg-brand-gold text-black rounded-lg text-xs font-bold" id="adm-btn-games">Games & Scores</button>
+                        <button onclick="adminSubTab('groups')" class="px-3 py-2 bg-[#22252e] border border-brand-border text-brand-gold rounded-lg text-xs font-bold" id="adm-btn-groups">Manage Groups</button>
+                        <button onclick="adminSubTab('export')" class="px-3 py-2 bg-[#22252e] border border-brand-border text-brand-gold rounded-lg text-xs font-bold" id="adm-btn-export">Export Excel / Sheet</button>
+                        <button onclick="adminSubTab('settings')" class="px-3 py-2 bg-[#22252e] border border-brand-border text-brand-gold rounded-lg text-xs font-bold" id="adm-btn-settings">Settings & Pass</button>
+                        <button onclick="handleAdminLogout()" class="px-3 py-2 bg-red-900/40 border border-red-500/50 text-red-300 rounded-lg text-xs font-bold">Logout</button>
+                    </div>
+                </div>
+
+                <div id="adm-subtab-games" class="admin-subcontent space-y-6">
+                    <div class="card-custom rounded-2xl p-6">
+                        <h3 class="text-base font-bold text-amber-600 dark:text-brand-gold mb-4"><i class="fa-solid fa-plus-circle mr-2"></i> નવી રમત (Game) ઉમેરો</h3>
+                        <form onsubmit="handleAddGame(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Game Name</label>
+                                <input type="text" id="new-game-name" required class="w-full bg-subcard border border-brand-border rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-brand-gold" placeholder="e.g. 100M દોડ / કબડ્ડી">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Category</label>
+                                <select id="new-game-cat" class="w-full bg-subcard border border-brand-border rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-brand-gold">
+                                    <option value="Athletics">Athletics</option>
+                                    <option value="Team Sport">Team Sport</option>
+                                    <option value="Individual">Individual</option>
+                                    <option value="Indoor">Indoor</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Status</label>
+                                <select id="new-game-status" class="w-full bg-subcard border border-brand-border rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-brand-gold">
+                                    <option value="Upcoming">Upcoming</option>
+                                    <option value="Live">Live</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                            </div>
+                            <div class="md:col-span-3 flex justify-end">
+                                <button type="submit" id="btn-add-game-submit" class="px-6 py-2 gold-soft-bg text-black font-bold rounded-lg text-sm shadow flex items-center gap-2">
+                                    <span>Add Game</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="card-custom rounded-2xl p-6 space-y-4">
+                        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                            <h3 class="text-base font-bold text-amber-600 dark:text-brand-gold"><i class="fa-solid fa-pen-to-square mr-2"></i> રમત પરિણામ અને સ્કોર મેનેજ કરો</h3>
+                            <div class="w-full md:w-80">
+                                <input type="text" id="admin-search-input" onkeyup="filterAdminGames()" placeholder="Search Game, Group, or Student..." class="w-full bg-subcard border border-brand-border rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:border-brand-gold">
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse min-w-[700px]">
+                                <thead>
+                                    <tr class="border-b border-brand-border text-amber-600 dark:text-brand-gold text-xs uppercase">
+                                        <th class="p-3">Game Name</th>
+                                        <th class="p-3">Category</th>
+                                        <th class="p-3">Status</th>
+                                        <th class="p-3">Winners (1st, 2nd, 3rd)</th>
+                                        <th class="p-3 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-games-tbody" class="divide-y divide-brand-border/40 text-sm">
+                                    <!-- JS -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="flex justify-between items-center pt-2 text-xs text-gray-500 dark:text-gray-400">
+                            <span id="page-info">Showing Page 1 of 1</span>
+                            <div class="flex gap-2">
+                                <button onclick="changePage(-1)" id="btn-prev-page" class="px-3 py-1.5 bg-[#22252e] border border-brand-border rounded text-white disabled:opacity-40">Previous</button>
+                                <button onclick="changePage(1)" id="btn-next-page" class="px-3 py-1.5 bg-[#22252e] border border-brand-border rounded text-white disabled:opacity-40">Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="adm-subtab-groups" class="admin-subcontent hidden space-y-6">
+                    <div class="card-custom rounded-2xl p-6">
+                        <h3 class="text-base font-bold text-amber-600 dark:text-brand-gold mb-4">નવો ગ્રુપ/હાઉસ ઉમેરો</h3>
+                        <form onsubmit="handleAddGroup(event)" class="flex gap-4">
+                            <input type="text" id="new-group-name" required placeholder="Group Name (e.g. Narnarayn Group)" class="flex-grow bg-subcard border border-brand-border rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-brand-gold">
+                            <button type="submit" class="px-6 py-2.5 gold-soft-bg text-black font-bold rounded-lg text-sm shadow">Add Group</button>
+                        </form>
+                    </div>
+                    <div class="card-custom rounded-2xl p-6">
+                        <h3 class="text-base font-bold text-amber-600 dark:text-brand-gold mb-4">હાલના ગ્રુપોની યાદી</h3>
+                        <div id="admin-groups-list" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <div id="adm-subtab-export" class="admin-subcontent hidden space-y-6">
+                    <div class="card-custom rounded-2xl p-6 space-y-4">
+                        <h3 class="text-lg font-bold text-amber-600 dark:text-brand-gold"><i class="fa-solid fa-file-excel mr-2"></i> Group-wise Winner Students Report Export</h3>
+                        <button onclick="exportGroupWiseReport()" class="px-6 py-3 gold-soft-bg text-black font-bold rounded-lg text-sm shadow hover:opacity-90 flex items-center gap-2">
+                            <i class="fa-solid fa-download"></i> Download Excel (.csv)
+                        </button>
+                    </div>
+
+                    <div class="card-custom rounded-2xl p-6 space-y-4">
+                        <h3 class="text-lg font-bold text-amber-600 dark:text-brand-gold"><i class="fa-solid fa-table mr-2"></i> Google Sheets Live Web App Link</h3>
+                        <div class="flex gap-2">
+                            <input type="url" id="sheet-web-app-url" class="flex-grow bg-subcard border border-brand-border rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-brand-gold">
+                            <button onclick="saveGoogleSheetUrl()" class="px-4 py-2.5 bg-brand-gold text-black font-bold rounded-lg text-sm">Save Link</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="adm-subtab-settings" class="admin-subcontent hidden space-y-6">
+                    <div class="card-custom rounded-2xl p-6 space-y-4 max-w-md">
+                        <h3 class="text-lg font-bold text-amber-600 dark:text-brand-gold"><i class="fa-solid fa-key mr-2"></i> એડમિન પાસવર્ડ બદલો</h3>
+                        <form onsubmit="handlePasswordChange(event)" class="space-y-3">
+                            <div>
+                                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">નવું યુઝરનેમ</label>
+                                <input type="text" id="new-admin-user" required class="w-full bg-subcard border border-brand-border rounded-lg p-2.5 text-sm text-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">નવો પાસવર્ડ</label>
+                                <input type="password" id="new-admin-pass" required class="w-full bg-subcard border border-brand-border rounded-lg p-2.5 text-sm text-white">
+                            </div>
+                            <button type="submit" class="w-full py-2.5 gold-soft-bg text-black font-bold rounded-lg text-sm shadow">Update Credentials</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- RESULT EDIT MODAL -->
+    <div id="result-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm hidden overflow-y-auto p-4">
+        <div class="card-custom w-full max-w-xl p-6 rounded-2xl border border-brand-border shadow-2xl space-y-4 my-8">
+            <h3 id="modal-game-title" class="text-lg font-bold gold-gradient-text">Record Winners & Points</h3>
+            <input type="hidden" id="modal-game-id">
+            
+            <div class="space-y-4">
+                <!-- 1st Rank -->
+                <div class="p-3 bg-subcard border border-amber-500/40 rounded-xl space-y-2">
+                    <div class="flex justify-between items-center text-xs text-amber-600 dark:text-amber-500 font-bold">
+                        <span>🥇 1st Rank Position</span>
+                        <span>Points: <input type="number" id="m-pts-1" value="100" class="w-16 bg-subcard border border-brand-border rounded px-2 py-0.5 text-amber-600 dark:text-amber-500 text-center font-bold"></span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <select id="m-group-1" class="bg-subcard border border-brand-border rounded-lg p-2 text-xs text-white group-select-options"></select>
+                        <input type="text" id="m-student-1" placeholder="Student Name" class="bg-subcard border border-brand-border rounded-lg p-2 text-xs text-white">
+                    </div>
+                </div>
+
+                <!-- 2nd Rank -->
+                <div class="p-3 bg-subcard border border-slate-400/40 rounded-xl space-y-2">
+                    <div class="flex justify-between items-center text-xs rank-2-text font-bold">
+                        <span>🥈 2nd Rank Position</span>
+                        <span>Points: <input type="number" id="m-pts-2" value="75" class="w-16 bg-subcard border border-brand-border rounded px-2 py-0.5 rank-2-text text-center font-bold"></span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <select id="m-group-2" class="bg-subcard border border-brand-border rounded-lg p-2 text-xs text-white group-select-options"></select>
+                        <input type="text" id="m-student-2" placeholder="Student Name" class="bg-subcard border border-brand-border rounded-lg p-2 text-xs text-white">
+                    </div>
+                </div>
+
+                <!-- 3rd Rank -->
+                <div class="p-3 bg-subcard border border-amber-700/40 rounded-xl space-y-2">
+                    <div class="flex justify-between items-center text-xs rank-3-text font-bold">
+                        <span>🥉 3rd Rank Position</span>
+                        <span>Points: <input type="number" id="m-pts-3" value="50" class="w-16 bg-subcard border border-brand-border rounded px-2 py-0.5 rank-3-text text-center font-bold"></span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <select id="m-group-3" class="bg-subcard border border-brand-border rounded-lg p-2 text-xs text-white group-select-options"></select>
+                        <input type="text" id="m-student-3" placeholder="Student Name" class="bg-subcard border border-brand-border rounded-lg p-2 text-xs text-white">
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Game Status</label>
+                <select id="modal-status" class="w-full bg-subcard border border-brand-border rounded-lg p-2.5 text-sm text-white">
+                    <option value="Completed">Completed</option>
+                    <option value="Live">Live</option>
+                    <option value="Upcoming">Upcoming</option>
+                </select>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-2">
+                <button onclick="closeResultModal()" class="px-4 py-2 bg-[#22252e] text-gray-300 rounded-lg text-sm">Cancel</button>
+                <button onclick="saveGameResult()" id="btn-save-modal-result" class="px-6 py-2 gold-soft-bg text-black font-bold rounded-lg text-sm shadow">Save Result</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer id="main-footer" class="bg-subcard border-t border-brand-border py-4 px-6 text-center text-xs text-gray-500 dark:text-gray-400 mt-8">
+        <p>© 2026 Shree Swaminarayan Gurukul. Ramat Utsav Live Scoreboard.</p>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        const DEFAULT_SHEET_URL = "https://script.google.com/macros/s/AKfycbz55uTQ_rZ-bYNaP4e8VTca1-Xjqs4PuAhnmcvleYjgHGBwi1IKEFfC3TpxNg9qpIHL/exec";
+
+        let appData = {
+            groups: [
+                { id: 'g1', name: 'Narnarayn Group' },
+                { id: 'g2', name: 'Gopinath Group' },
+                { id: 'g3', name: 'Swaminarayan Group' },
+                { id: 'g4', name: 'Sahajanand Group' }
+            ],
+            games: [],
+            adminAuth: { user: 'admin', pass: 'gurukul2026' },
+            sheetUrl: DEFAULT_SHEET_URL,
+            themeMode: 'dark'
+        };
+
+        let currentPage = 1;
+        const pageSize = 10;
+        let filteredGamesList = [];
+        let isSyncing = false;
+
+        function toggleThemeMode() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                appData.themeMode = 'light';
+                document.getElementById('theme-btn-icon').className = 'fa-solid fa-moon';
+                document.getElementById('theme-btn-text').innerText = 'Dark';
+            } else {
+                html.classList.remove('light');
+                html.classList.add('dark');
+                appData.themeMode = 'dark';
+                document.getElementById('theme-btn-icon').className = 'fa-solid fa-sun';
+                document.getElementById('theme-btn-text').innerText = 'Light';
+            }
+            saveStorage(false);
+        }
+
+        function applySavedTheme() {
+            const html = document.documentElement;
+            if (appData.themeMode === 'light') {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                document.getElementById('theme-btn-icon').className = 'fa-solid fa-moon';
+                document.getElementById('theme-btn-text').innerText = 'Dark';
+            } else {
+                html.classList.remove('light');
+                html.classList.add('dark');
+                document.getElementById('theme-btn-icon').className = 'fa-solid fa-sun';
+                document.getElementById('theme-btn-text').innerText = 'Light';
+            }
+        }
+
+        function startActiveClock() {
+            setInterval(() => {
+                const clockElem = document.getElementById('stat-active-time');
+                if (clockElem) {
+                    const now = new Date();
+                    clockElem.innerText = now.toLocaleTimeString();
+                }
+            }, 1000);
+        }
+
+        function startAutoCloudSync() {
+            setInterval(() => {
+                if (!isSyncing) {
+                    fetchLatestDataFromSheet(false);
+                }
+            }, 6000);
+        }
+
+        function loadStorage() {
+            const saved = localStorage.getItem('gurukul_sports_data');
+            if (saved) {
+                try { appData = JSON.parse(saved); } catch(e) {}
+            }
+            if (!appData.adminAuth) appData.adminAuth = { user: 'admin', pass: 'gurukul2026' };
+            if (!appData.sheetUrl) appData.sheetUrl = DEFAULT_SHEET_URL;
+            if (!appData.themeMode) appData.themeMode = 'dark';
+            const input = document.getElementById('sheet-web-app-url');
+            if (input) input.value = appData.sheetUrl;
+            applySavedTheme();
+        }
+
+        function saveStorage(shouldSyncSheet = true) {
+            localStorage.setItem('gurukul_sports_data', JSON.stringify(appData));
+            
+            renderScoreboard();
+            renderGamesList();
+            renderLedAutoScroll();
+            filterAdminGames();
+            
+            if (shouldSyncSheet) {
+                return syncToGoogleSheets();
+            }
+            return Promise.resolve();
+        }
+
+        async function syncToGoogleSheets() {
+            if (!appData.sheetUrl) return;
+            isSyncing = true;
+            
+            const payload = "data=" + encodeURIComponent(JSON.stringify(appData));
+            
+            try {
+                let res = await fetch(appData.sheetUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: payload
+                });
+                let text = await res.text();
+                console.log('Sheet Sync Success:', text);
+            } catch (e) {
+                console.error('Sheet Sync Error:', e);
+            } finally {
+                isSyncing = false;
+            }
+        }
+
+        function fetchLatestDataFromSheet(showAlert = true) {
+            if (!appData.sheetUrl || isSyncing) return;
+            const noCacheUrl = appData.sheetUrl + (appData.sheetUrl.includes('?') ? '&' : '?') + 't=' + new Date().getTime();
+            
+            fetch(noCacheUrl)
+                .then(res => res.json())
+                .then(data => {
+                    if (data && !isSyncing) {
+                        let isUpdated = false;
+                        if (data.games && Array.isArray(data.games)) {
+                            appData.games = data.games;
+                            isUpdated = true;
+                        }
+                        if (data.groups && Array.isArray(data.groups) && data.groups.length > 0) {
+                            appData.groups = data.groups;
+                            isUpdated = true;
+                        }
+                        if (isUpdated) {
+                            localStorage.setItem('gurukul_sports_data', JSON.stringify(appData));
+                            renderScoreboard();
+                            renderGamesList();
+                            renderLedAutoScroll();
+                            filterAdminGames();
+                        }
+                        if (showAlert) alert('Cloud Sync Successful!');
+                    }
+                })
+                .catch(err => {
+                    if (showAlert) alert('Sync Error');
+                    console.log("Fetch Error:", err);
+                });
+        }
+
+        function forceSyncData() {
+            fetchLatestDataFromSheet(true);
+        }
+
+        function saveGoogleSheetUrl() {
+            const url = document.getElementById('sheet-web-app-url').value;
+            appData.sheetUrl = url;
+            saveStorage(true);
+            alert('Google Sheets Link Saved Successfully!');
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            ['scoreboard', 'games', 'led', 'admin'].forEach(t => {
+                const btn = document.getElementById(`nav-${t}`);
+                if (t === tabId) {
+                    btn.className = "px-4 py-2 rounded-xl font-bold text-sm md:text-base transition-all bg-brand-gold text-black shadow";
+                } else {
+                    btn.className = "px-4 py-2 rounded-xl font-bold text-sm md:text-base transition-all bg-[#22252e] text-gray-200 border border-brand-border hover:border-brand-gold/50";
+                }
+            });
+
+            if (tabId === 'scoreboard') renderScoreboard();
+            if (tabId === 'games') renderGamesList();
+            if (tabId === 'led') renderLedAutoScroll();
+        }
+
+        function adminSubTab(subId) {
+            document.querySelectorAll('.admin-subcontent').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`adm-subtab-${subId}`).classList.remove('hidden');
+
+            ['games', 'groups', 'export', 'settings'].forEach(s => {
+                const btn = document.getElementById(`adm-btn-${s}`);
+                if (btn) {
+                    if (s === subId) {
+                        btn.className = "px-3 py-2 bg-brand-gold text-black rounded-lg text-xs font-bold";
+                    } else {
+                        btn.className = "px-3 py-2 bg-[#22252e] border border-brand-border text-brand-gold rounded-lg text-xs font-bold";
+                    }
+                }
+            });
+
+            if (subId === 'games') renderAdminGames();
+            if (subId === 'groups') renderAdminGroups();
+        }
+
+        function renderScoreboard() {
+            const search = (document.getElementById('search-group')?.value || '').toLowerCase();
+
+            let groupStats = {};
+            appData.groups.forEach(g => {
+                groupStats[g.name] = { name: g.name, played: 0, pos1: 0, pos2: 0, pos3: 0, points: 0 };
+            });
+
+            let winnerStudentsCount = 0;
+
+            appData.games.forEach(game => {
+                if (game.status === 'Completed') {
+                    if (game.pos1Group && groupStats[game.pos1Group]) {
+                        groupStats[game.pos1Group].played += 1;
+                        groupStats[game.pos1Group].pos1 += 1;
+                        groupStats[game.pos1Group].points += Number(game.pos1Pts || 100);
+                    }
+                    if (game.pos2Group && groupStats[game.pos2Group]) {
+                        groupStats[game.pos2Group].played += 1;
+                        groupStats[game.pos2Group].pos2 += 1;
+                        groupStats[game.pos2Group].points += Number(game.pos2Pts || 75);
+                    }
+                    if (game.pos3Group && groupStats[game.pos3Group]) {
+                        groupStats[game.pos3Group].played += 1;
+                        groupStats[game.pos3Group].pos3 += 1;
+                        groupStats[game.pos3Group].points += Number(game.pos3Pts || 50);
+                    }
+
+                    if (game.pos1Student && game.pos1Student !== '-') winnerStudentsCount++;
+                    if (game.pos2Student && game.pos2Student !== '-') winnerStudentsCount++;
+                    if (game.pos3Student && game.pos3Student !== '-') winnerStudentsCount++;
+                }
+            });
+
+            let sortedGroups = Object.values(groupStats).sort((a, b) => {
+                if (b.points !== a.points) return b.points - a.points;
+                if (b.pos1 !== a.pos1) return b.pos1 - a.pos1;
+                return b.pos2 - a.pos2;
+            });
+
+            document.getElementById('stat-groups').innerText = appData.groups.length;
+            document.getElementById('stat-games').innerText = appData.games.filter(g => g.status === 'Completed').length;
+            document.getElementById('stat-winners').innerText = winnerStudentsCount;
+
+            const tbody = document.getElementById('scoreboard-tbody');
+            tbody.innerHTML = '';
+
+            let filtered = sortedGroups.filter(g => g.name.toLowerCase().includes(search));
+
+            filtered.forEach((g, index) => {
+                let rankBadge = `<span class="px-3 py-1 rounded-lg font-bold text-sm bg-gray-200 dark:bg-[#22252e] text-gray-800 dark:text-gray-300">#${index + 1}</span>`;
+                if (index === 0) rankBadge = `<span class="px-3 py-1 rounded-lg font-black text-sm bg-amber-500/20 border border-amber-500/50 rank-1-text"><i class="fa-solid fa-crown mr-1"></i> #1 Rank</span>`;
+                else if (index === 1) rankBadge = `<span class="px-3 py-1 rounded-lg font-black text-sm bg-slate-400/20 border border-slate-400/50 rank-2-text">#2 Rank</span>`;
+                else if (index === 2) rankBadge = `<span class="px-3 py-1 rounded-lg font-black text-sm bg-amber-800/20 border border-amber-700/50 rank-3-text">#3 Rank</span>`;
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-amber-500/10 transition">
+                        <td class="p-4">${rankBadge}</td>
+                        <td class="p-4 font-black text-gray-900 dark:text-white far-readable-text">${g.name}</td>
+                        <td class="p-4 text-center text-gray-800 dark:text-gray-300 font-bold">${g.played}</td>
+                        <td class="p-4 text-center rank-1-text font-black text-xl">${g.pos1}</td>
+                        <td class="p-4 text-center rank-2-text font-black text-xl">${g.pos2}</td>
+                        <td class="p-4 text-center rank-3-text font-black text-xl">${g.pos3}</td>
+                        <td class="p-4 text-right font-black text-2xl md:text-3xl text-amber-600 dark:text-amber-500">${g.points}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function renderGamesList() {
+            const statusFilter = document.getElementById('filter-game-status').value;
+            const search = (document.getElementById('search-game')?.value || '').toLowerCase();
+            const grid = document.getElementById('games-grid');
+            grid.innerHTML = '';
+
+            let filtered = appData.games.filter(g => {
+                let matchStatus = (statusFilter === 'ALL' || g.status === statusFilter);
+                let matchSearch = g.name.toLowerCase().includes(search);
+                return matchStatus && matchSearch;
+            });
+
+            filtered.forEach(game => {
+                let statusBadge = `<span class="px-2.5 py-1 rounded-md text-xs font-bold bg-blue-900/35 border border-blue-500/40 text-blue-400 dark:text-blue-300">Upcoming</span>`;
+                if (game.status === 'Live') statusBadge = `<span class="px-2.5 py-1 rounded-md text-xs font-bold bg-red-900/40 border border-red-500/50 text-red-500 dark:text-red-300 animate-pulse">Live</span>`;
+                if (game.status === 'Completed') statusBadge = `<span class="px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-900/30 border border-emerald-500/40 text-emerald-600 dark:text-emerald-300">Completed</span>`;
+
+                grid.innerHTML += `
+                    <div class="card-custom p-6 rounded-2xl flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-xs text-amber-600 dark:text-amber-500 font-bold uppercase tracking-wider">${game.category}</span>
+                                ${statusBadge}
+                            </div>
+                            <h3 class="text-xl font-black text-gray-900 dark:text-white">${game.name}</h3>
+                        </div>
+                        <div class="bg-subcard p-4 rounded-xl border border-brand-border/60 text-sm space-y-3">
+                            <div class="flex justify-between border-b border-brand-border/40 pb-2">
+                                <span class="text-gray-700 dark:text-gray-300 font-medium">1st: <b class="rank-1-text font-bold">${game.pos1Group || 'TBD'}</b> (${game.pos1Student || '-'})</span>
+                                <span class="rank-1-text font-black">${game.pos1Pts || 100} Pts</span>
+                            </div>
+                            <div class="flex justify-between border-b border-brand-border/40 pb-2">
+                                <span class="text-gray-700 dark:text-gray-300 font-medium">2nd: <b class="rank-2-text font-bold">${game.pos2Group || 'TBD'}</b> (${game.pos2Student || '-'})</span>
+                                <span class="rank-2-text font-black">${game.pos2Pts || 75} Pts</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-700 dark:text-gray-300 font-medium">3rd: <b class="rank-3-text font-bold">${game.pos3Group || 'TBD'}</b> (${game.pos3Student || '-'})</span>
+                                <span class="rank-3-text font-black">${game.pos3Pts || 50} Pts</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderLedAutoScroll() {
+            const container = document.getElementById('led-scroll-content');
+            container.innerHTML = '';
+
+            let groupStats = {};
+            appData.groups.forEach(g => {
+                groupStats[g.name] = { name: g.name, points: 0 };
+            });
+
+            appData.games.forEach(game => {
+                if (game.status === 'Completed') {
+                    if (game.pos1Group && groupStats[game.pos1Group]) groupStats[game.pos1Group].points += Number(game.pos1Pts || 100);
+                    if (game.pos2Group && groupStats[game.pos2Group]) groupStats[game.pos2Group].points += Number(game.pos2Pts || 75);
+                    if (game.pos3Group && groupStats[game.pos3Group]) groupStats[game.pos3Group].points += Number(game.pos3Pts || 50);
+                }
+            });
+
+            let sorted = Object.values(groupStats).sort((a, b) => b.points - a.points);
+
+            sorted.forEach((g, idx) => {
+                let rankColor = "text-amber-600 dark:text-amber-500 border-amber-500/50 bg-amber-500/10";
+                if (idx === 1) rankColor = "rank-2-text border-slate-400/50 bg-slate-400/10";
+                if (idx === 2) rankColor = "rank-3-text border-amber-700/50 bg-amber-700/10";
+                if (idx > 2) rankColor = "text-gray-600 dark:text-gray-400 border-brand-border bg-subcard";
+
+                container.innerHTML += `
+                    <div class="flex justify-between items-center p-6 md:p-8 border-4 ${rankColor} rounded-3xl shadow-2xl">
+                        <div class="flex items-center gap-6">
+                            <span class="text-4xl md:text-6xl font-black ${rankColor}">#${idx + 1}</span>
+                            <span class="text-2xl md:text-5xl font-black text-gray-900 dark:text-white tracking-wide">${g.name}</span>
+                        </div>
+                        <span class="text-4xl md:text-6xl font-black text-amber-600 dark:text-amber-500">${g.points} <span class="text-xl text-gray-500 dark:text-gray-400">Pts</span></span>
+                    </div>
+                `;
+            });
+        }
+
+        function renderAdminGames() {
+            filterAdminGames();
+        }
+
+        function filterAdminGames() {
+            const query = (document.getElementById('admin-search-input')?.value || '').toLowerCase();
+            
+            filteredGamesList = appData.games.filter(g => {
+                let nameMatch = g.name.toLowerCase().includes(query);
+                let catMatch = g.category.toLowerCase().includes(query);
+                let groupMatch = (g.pos1Group || '').toLowerCase().includes(query) || (g.pos2Group || '').toLowerCase().includes(query) || (g.pos3Group || '').toLowerCase().includes(query);
+                let studentMatch = (g.pos1Student || '').toLowerCase().includes(query) || (g.pos2Student || '').toLowerCase().includes(query) || (g.pos3Student || '').toLowerCase().includes(query);
+                return nameMatch || catMatch || groupMatch || studentMatch;
+            });
+
+            const totalPages = Math.ceil(filteredGamesList.length / pageSize) || 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+
+            const startIdx = (currentPage - 1) * pageSize;
+            const pageGames = filteredGamesList.slice(startIdx, startIdx + pageSize);
+
+            const tbody = document.getElementById('admin-games-tbody');
+            tbody.innerHTML = '';
+
+            if (pageGames.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-gray-500">No games found.</td></tr>`;
+            } else {
+                pageGames.forEach(game => {
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-amber-500/10">
+                            <td class="p-3 font-extrabold text-gray-900 dark:text-white text-base">${game.name}</td>
+                            <td class="p-3 text-gray-700 dark:text-gray-300">${game.category}</td>
+                            <td class="p-3 text-amber-600 dark:text-amber-500 font-bold">${game.status}</td>
+                            <td class="p-3 text-xs space-y-1">
+                                <div><b class="rank-1-text">1st:</b> ${game.pos1Group || '-'} (${game.pos1Student || '-'})</div>
+                                <div><b class="rank-2-text">2nd:</b> ${game.pos2Group || '-'} (${game.pos2Student || '-'})</div>
+                                <div><b class="rank-3-text">3rd:</b> ${game.pos3Group || '-'} (${game.pos3Student || '-'})</div>
+                            </td>
+                            <td class="p-3 text-right space-x-2">
+                                <button onclick="openResultModal('${game.id}')" class="px-3 py-1.5 bg-amber-500 text-black font-extrabold rounded text-xs hover:opacity-90 shadow"><i class="fa-solid fa-pen"></i> Edit</button>
+                                <button onclick="deleteGame('${game.id}')" class="px-3 py-1.5 bg-red-900/50 text-red-300 border border-red-500/50 rounded text-xs hover:bg-red-800"><i class="fa-solid fa-trash"></i> Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+
+            document.getElementById('page-info').innerText = `Showing Page ${currentPage} of ${totalPages} (Total: ${filteredGamesList.length} Games)`;
+            document.getElementById('btn-prev-page').disabled = (currentPage === 1);
+            document.getElementById('btn-next-page').disabled = (currentPage === totalPages);
+        }
+
+        function changePage(delta) {
+            currentPage += delta;
+            filterAdminGames();
+        }
+
+        async function handleAddGame(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-add-game-submit');
+            btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Saving...';
+            btn.disabled = true;
+
+            const name = document.getElementById('new-game-name').value;
+            const category = document.getElementById('new-game-cat').value;
+            const status = document.getElementById('new-game-status').value;
+
+            const newGameObj = {
+                id: 'game-' + Date.now(),
+                name, category, status,
+                pos1Group: '', pos1Student: '', pos1Pts: 100,
+                pos2Group: '', pos2Student: '', pos2Pts: 75,
+                pos3Group: '', pos3Student: '', pos3Pts: 50
+            };
+
+            appData.games.unshift(newGameObj);
+            
+            await saveStorage(true);
+            
+            document.getElementById('new-game-name').value = '';
+            currentPage = 1;
+            btn.innerHTML = 'Add Game';
+            btn.disabled = false;
+            alert('નવી રમત સફળતાપૂર્વક ઉમેરાઈ ગઈ અને Google Sheet માં સાચવવામાં આવી!');
+        }
+
+        function deleteGame(id) {
+            if (confirm('શું તમે આ ગેમ ડિલીટ કરવા માંગો છો?')) {
+                appData.games = appData.games.filter(g => g.id !== id);
+                saveStorage(true);
+            }
+        }
+
+        function openResultModal(gameId) {
+            const game = appData.games.find(g => g.id === gameId);
+            if (!game) return;
+
+            document.getElementById('modal-game-title').innerText = `Edit Winners: ${game.name}`;
+            document.getElementById('modal-game-id').value = game.id;
+
+            document.querySelectorAll('.group-select-options').forEach(select => {
+                select.innerHTML = '<option value="">Select Group</option>';
+                appData.groups.forEach(g => {
+                    select.innerHTML += `<option value="${g.name}">${g.name}</option>`;
+                });
+            });
+
+            document.getElementById('m-group-1').value = game.pos1Group || '';
+            document.getElementById('m-student-1').value = game.pos1Student || '';
+            document.getElementById('m-pts-1').value = game.pos1Pts || 100;
+
+            document.getElementById('m-group-2').value = game.pos2Group || '';
+            document.getElementById('m-student-2').value = game.pos2Student || '';
+            document.getElementById('m-pts-2').value = game.pos2Pts || 75;
+
+            document.getElementById('m-group-3').value = game.pos3Group || '';
+            document.getElementById('m-student-3').value = game.pos3Student || '';
+            document.getElementById('m-pts-3').value = game.pos3Pts || 50;
+
+            document.getElementById('modal-status').value = game.status;
+
+            document.getElementById('result-modal').classList.remove('hidden');
+        }
+
+        function closeResultModal() {
+            document.getElementById('result-modal').classList.add('hidden');
+        }
+
+        async function saveGameResult() {
+            const btn = document.getElementById('btn-save-modal-result');
+            btn.innerText = 'Saving...';
+            btn.disabled = true;
+
+            const gameId = document.getElementById('modal-game-id').value;
+            const game = appData.games.find(g => g.id === gameId);
+
+            if (game) {
+                game.pos1Group = document.getElementById('m-group-1').value;
+                game.pos1Student = document.getElementById('m-student-1').value;
+                game.pos1Pts = Number(document.getElementById('m-pts-1').value || 100);
+
+                game.pos2Group = document.getElementById('m-group-2').value;
+                game.pos2Student = document.getElementById('m-student-2').value;
+                game.pos2Pts = Number(document.getElementById('m-pts-2').value || 75);
+
+                game.pos3Group = document.getElementById('m-group-3').value;
+                game.pos3Student = document.getElementById('m-student-3').value;
+                game.pos3Pts = Number(document.getElementById('m-pts-3').value || 50);
+
+                game.status = document.getElementById('modal-status').value;
+
+                await saveStorage(true);
+                closeResultModal();
+                btn.innerText = 'Save Result';
+                btn.disabled = false;
+                alert('સ્કોર સફળતાપૂર્વક સેવ થઈ ગયો!');
+            }
+        }
+
+        function renderAdminGroups() {
+            const list = document.getElementById('admin-groups-list');
+            list.innerHTML = '';
+            appData.groups.forEach(g => {
+                list.innerHTML += `
+                    <div class="card-custom p-3 rounded-lg flex justify-between items-center">
+                        <span class="font-bold text-gray-900 dark:text-white text-base">${g.name}</span>
+                        <button onclick="deleteGroup('${g.id}')" class="text-red-500 text-sm hover:text-red-700"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+            });
+        }
+
+        function handleAddGroup(e) {
+            e.preventDefault();
+            const name = document.getElementById('new-group-name').value;
+            appData.groups.push({ id: 'g-' + Date.now(), name });
+            saveStorage(true);
+            document.getElementById('new-group-name').value = '';
+            renderAdminGroups();
+        }
+
+        function deleteGroup(id) {
+            if (confirm('Delete this group?')) {
+                appData.groups = appData.groups.filter(g => g.id !== id);
+                saveStorage(true);
+                renderAdminGroups();
+            }
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('admin-user').value;
+            const p = document.getElementById('admin-pass').value;
+            if (u === appData.adminAuth.user && p === appData.adminAuth.pass) {
+                document.getElementById('admin-login-card').classList.add('hidden');
+                document.getElementById('admin-dashboard-panel').classList.remove('hidden');
+                adminSubTab('games');
+            } else {
+                alert('અમાન્ય યુઝરનેમ અથવા પાસવર્ડ!');
+            }
+        }
+
+        function handleAdminLogout() {
+            document.getElementById('admin-dashboard-panel').classList.add('hidden');
+            document.getElementById('admin-login-card').classList.remove('hidden');
+        }
+
+        function handlePasswordChange(e) {
+            e.preventDefault();
+            const newUser = document.getElementById('new-admin-user').value;
+            const newPass = document.getElementById('new-admin-pass').value;
+            appData.adminAuth = { user: newUser, pass: newPass };
+            saveStorage(false);
+            alert('Admin credentials updated successfully!');
+        }
+
+        function exportGroupWiseReport() {
+            let csv = 'Game Name,Category,Status,1st Winner Group,1st Student,1st Points,2nd Winner Group,2nd Student,2nd Points,3rd Winner Group,3rd Student,3rd Points\n';
+            appData.games.forEach(game => {
+                csv += `"${game.name}","${game.category}","${game.status}","${game.pos1Group || '-'}","${game.pos1Student || '-'}","${game.pos1Pts || 100}","${game.pos2Group || '-'}","${game.pos2Student || '-'}","${game.pos2Pts || 75}","${game.pos3Group || '-'}","${game.pos3Student || '-'}","${game.pos3Pts || 50}"\n`;
+            });
+
+            let blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            let url = URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = 'Gurukul_Group_Wise_Winners_Report.csv';
+            a.click();
+        }
+
+        function openLedFullScreen() {
+            let elem = document.documentElement;
+            if (elem.requestFullscreen) elem.requestFullscreen();
+            switchTab('led');
+            document.getElementById('main-header')?.classList.add('hidden');
+            document.getElementById('main-ticker')?.classList.add('hidden');
+            document.getElementById('main-footer')?.classList.add('hidden');
+            document.getElementById('led-top-controls')?.classList.add('hidden');
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement) {
+                document.getElementById('main-header')?.classList.remove('hidden');
+                document.getElementById('main-ticker')?.classList.remove('hidden');
+                document.getElementById('main-footer')?.classList.remove('hidden');
+                document.getElementById('led-top-controls')?.classList.remove('hidden');
+            }
+        });
+
+        window.onload = function() {
+            loadStorage();
+            fetchLatestDataFromSheet(false);
+            renderScoreboard();
+            startActiveClock();
+            startAutoCloudSync();
+        };
+    </script>
+</body>
+</html>
